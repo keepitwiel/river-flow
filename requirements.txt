@@ -2,4 +2,4 @@ numpy
 matplotlib
 tqdm
 numba
-scipy
+git+https://github.com/keepitwiel/height-map.git

@@ -1,21 +1,22 @@
 import numpy as np
 from tqdm import tqdm
 from matplotlib import pyplot as plt
+from matplotlib import colors
 from height_map import generate_height_map
 
 from solver import update
 
 
 SEED = 116
-MAP_WIDTH = 64
+MAP_WIDTH = 128
 MAP_HEIGHT = 128
-SEA_LEVEL = 64
-RANDOM_AMPLITUDE = 64
-SLOPE_AMPLITUDE = 256
+SEA_LEVEL = 16
+RANDOM_AMPLITUDE = 16
+SLOPE_AMPLITUDE = 64
 SMOOTHNESS = 0.6
 RAINFALL = 0.1
-EVAP = 0.001
-EROSION = 0.1
+EVAP = 0.0001
+EROSION = 0.01
 
 
 def main():
@@ -33,22 +34,25 @@ def main():
     flux = np.zeros_like(h)
     flux_out = np.zeros_like(h)
 
-    fig, axes = plt.subplots(1, 4)
-    axes[0].imshow(z)
+    fig, axes = plt.subplots(1, 4, figsize=(12, 4))
     axes[0].set_title("Terrain altitude")
+    cmap = colors.ListedColormap(["blue", "cyan", "green", "yellow", "orange", "red"])
+    bounds = [-128, 0, 16, 32, 48, 64, 128]
+    norm = colors.BoundaryNorm(bounds, cmap.N)
     axes[1].set_title(f"Total water: {np.sum(h):2.2f}")
     axes[2].set_title("Flux")
     axes[3].set_title("Terrain displacement")
 
-    for _ in tqdm(range(10000)):
+    for count in tqdm(range(100000)):
         update(z, dz, h, dh, flux, flux_out, r, evap=EVAP, erosion=EROSION, dt=0.1)
-
-        if _ % 100 == 0:
-            axes[1].imshow(h, vmax=RAINFALL)
+        if count % 1000 == 0:
+            axes[0].imshow(z, cmap=cmap, norm=norm)
+            axes[1].imshow(h, vmax=RAINFALL * 100)
             axes[1].set_title(f"Total water: {np.sum(h):2.2f}")
-            axes[2].imshow(flux_out, vmax=RAINFALL)
-            axes[3].imshow(z - z0, vmin=-1, vmax=1)
+            axes[2].imshow(flux_out, vmax=RAINFALL * 10)
+            axes[3].imshow(z - z0, vmin=-10, vmax=10)
             plt.pause(0.001)
+        count += 1
 
 
 if __name__ == "__main__":

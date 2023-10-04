@@ -5,7 +5,7 @@ from numba import njit
 def update(z, dz, h, dh, flux, flux_out, r, evap, erosion, dt):
     update_water(z, h, dh, flux, r, dt)
     diffuse_terrain(z, dz, h, flux, erosion, dt)
-    # evaporate(h, flux, evap, dt)
+    evaporate(h, flux, evap, dt)
     flux_out[:, :] = flux[:, :]
     flux.fill(0.0)
 

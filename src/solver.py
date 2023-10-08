@@ -18,11 +18,7 @@ def update_water(H, z, h, dh, r, dt, evap):
                 down  = max(H_ - H[j+1, i], 0) if j + 1 < width else 0
                 total = left + right + up + down
                 if total > 0:
-                    # tau is a factor that prevents large oscillations when the target h's have high depth
-                    # if target h's are all 0, then tau = 1
-                    # if target h's are all large, then tau tends to 0
-                    # tau = np.exp(-(left * h[j, i-1] + right * h[j, i+1] + up * h[j-1, i] + down * h[j+1, i]))
-                    delta = h_ / total * dt # * tau
+                    delta = h_ / total * dt
                     dh[j, i] -= total * delta
                     dh[j, i-1] += left * delta
                     dh[j, i+1] += right * delta

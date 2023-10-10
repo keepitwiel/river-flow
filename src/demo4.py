@@ -18,6 +18,7 @@ z = generate(
     random_seed=116,
     slope=np.array([[True, False], [True, True]])
 )
+z = z.astype(np.float32)
 z -= SEA_LEVEL
 z0 = z.copy()
 
@@ -37,5 +38,4 @@ axes[1].imshow(h)
 axes[1].set_title(f"Total water: {np.sum(h):2.2f}")
 axes[2].imshow(z - z0)
 axes[2].set_title(f"Terrain erosion: {np.sum(np.abs(z - z0)):2.2f}")
-# plt.pause(0.001)
 plt.show()

@@ -19,10 +19,8 @@ z = generate(
 )
 mh, mw = z.shape
 z -= SEA_LEVEL
-r = np.zeros_like(z)
-r[(3 * mh) // 4:(3 * mh) // 4 + 8, mh // 4: mh // 4 + 8] = RAINFALL
-r[(3 * mh) // 4:(3 * mh) // 4 + 8, (3 * mh) // 4:(3 * mh) // 4 + 8] = RAINFALL
-h = r.copy()
+r = np.zeros_like(z) + RAINFALL / mh / mw
+h = np.zeros_like(z)
 dh = np.zeros_like(z)
 dz = np.zeros_like(z)
 
@@ -34,7 +32,7 @@ for count in tqdm(range(100000)):
     if count % 1000 == 0:
         axes[0].imshow(z, cmap="terrain")
         axes[0].set_title(f"Terrain altitude: {np.min(z):2.0f}-{np.max(z):2.0f}")
-        axes[1].imshow(h, vmax=RAINFALL * 20)
+        axes[1].imshow(h)
         axes[1].set_title(f"Iteration: {count}, Total water: {np.sum(h):2.2f}")
         plt.pause(0.001)
     update_water(z, h, dh, r, dt=0.1)

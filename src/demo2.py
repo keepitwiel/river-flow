@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from matplotlib import colors
 from height_map import generate
 
-from solver import update_water, update_terrain
+from pseudo_solver import update_water, update_terrain
 
 
 SEA_LEVEL = 64
